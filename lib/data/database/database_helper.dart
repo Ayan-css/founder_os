@@ -4,8 +4,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static const String _dbName    = 'founder_os.db';
-  static const int    _dbVersion = 1;
+  static const String _dbName = 'founder_os.db';
+  static const int _dbVersion = 1;
 
   DatabaseHelper._();
   static final DatabaseHelper instance = DatabaseHelper._();
@@ -21,7 +21,7 @@ class DatabaseHelper {
     if (Platform.isAndroid || Platform.isIOS) {
       return join(await getDatabasesPath(), _dbName);
     }
-    final dir    = await getApplicationDocumentsDirectory();
+    final dir = await getApplicationDocumentsDirectory();
     final appDir = Directory(join(dir.path, 'FounderOS'));
     if (!await appDir.exists()) await appDir.create(recursive: true);
     return join(appDir.path, _dbName);

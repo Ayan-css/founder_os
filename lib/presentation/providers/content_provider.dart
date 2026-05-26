@@ -28,11 +28,11 @@ class ContentNotifier extends StateNotifier<AsyncValue<List<ContentItem>>> {
   }) async {
     if (title.trim().isEmpty) return;
     try {
-      final now  = DateTime.now();
+      final now = DateTime.now();
       final item = ContentItem(
-        title:     title.trim(),
-        stage:     stage,
-        notes:     notes?.trim().isEmpty == true ? null : notes?.trim(),
+        title: title.trim(),
+        stage: stage,
+        notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
         createdAt: now,
         updatedAt: now,
       );
@@ -74,16 +74,14 @@ class ContentNotifier extends StateNotifier<AsyncValue<List<ContentItem>>> {
     } catch (_) {}
   }
 
-  void _prepend(ContentItem item) => state.whenData(
-      (list) => state = AsyncValue.data([item, ...list]));
+  void _prepend(ContentItem item) =>
+      state.whenData((list) => state = AsyncValue.data([item, ...list]));
 
-  void _replace(ContentItem item) => state.whenData((list) =>
-      state = AsyncValue.data(
-          list.map((i) => i.id == item.id ? item : i).toList()));
+  void _replace(ContentItem item) => state.whenData((list) => state =
+      AsyncValue.data(list.map((i) => i.id == item.id ? item : i).toList()));
 
   void _remove(ContentItem item) => state.whenData((list) =>
-      state = AsyncValue.data(
-          list.where((i) => i.id != item.id).toList()));
+      state = AsyncValue.data(list.where((i) => i.id != item.id).toList()));
 }
 
 final contentProvider =
@@ -94,14 +92,13 @@ final contentProvider =
 final contentByStageProvider =
     Provider.family<List<ContentItem>, ContentStage>((ref, stage) {
   return ref.watch(contentProvider).whenOrNull(
-        data: (items) => items.where((i) => i.stage == stage).toList(),
-      ) ??
+            data: (items) => items.where((i) => i.stage == stage).toList(),
+          ) ??
       [];
 });
 
 final stageCountsProvider = Provider<Map<ContentStage, int>>((ref) {
-  final items =
-      ref.watch(contentProvider).whenOrNull(data: (i) => i) ?? [];
+  final items = ref.watch(contentProvider).whenOrNull(data: (i) => i) ?? [];
   return {
     for (final s in ContentStage.values)
       s: items.where((i) => i.stage == s).length,
@@ -110,8 +107,8 @@ final stageCountsProvider = Provider<Map<ContentStage, int>>((ref) {
 
 final activePipelineCountProvider = Provider<int>((ref) {
   return ref.watch(contentProvider).whenOrNull(
-        data: (items) =>
-            items.where((i) => i.stage != ContentStage.posted).length,
-      ) ??
+            data: (items) =>
+                items.where((i) => i.stage != ContentStage.posted).length,
+          ) ??
       0;
 });

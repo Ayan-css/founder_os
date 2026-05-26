@@ -5,12 +5,12 @@ class CaptureRepository {
   final _db = DatabaseHelper.instance;
 
   Future<List<Capture>> getAll({CaptureType? filterType}) async {
-    final db   = await _db.database;
+    final db = await _db.database;
     final maps = await db.query(
       'captures',
-      where:     filterType != null ? 'type = ?' : null,
+      where: filterType != null ? 'type = ?' : null,
       whereArgs: filterType != null ? [filterType.dbValue] : null,
-      orderBy:   'created_at DESC',
+      orderBy: 'created_at DESC',
     );
     return maps.map(Capture.fromMap).toList();
   }
@@ -34,11 +34,11 @@ class CaptureRepository {
   }
 
   Future<int> getTodayCount() async {
-    final db  = await _db.database;
+    final db = await _db.database;
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, now.day).toIso8601String();
-    final end   = DateTime(now.year, now.month, now.day, 23, 59, 59)
-        .toIso8601String();
+    final end =
+        DateTime(now.year, now.month, now.day, 23, 59, 59).toIso8601String();
     final result = await db.rawQuery('''
       SELECT COUNT(*) as count FROM captures
       WHERE created_at >= ? AND created_at <= ?

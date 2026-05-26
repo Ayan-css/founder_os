@@ -29,9 +29,9 @@ class GreetingHeader extends ConsumerWidget {
           ),
         ),
         streakAsync.when(
-          data:    (n) => _StreakBadge(streak: n),
-          loading: ()  => const _StreakBadge(streak: 0),
-          error:   (_, __) => const SizedBox.shrink(),
+          data: (n) => _StreakBadge(streak: n),
+          loading: () => const _StreakBadge(streak: 0),
+          error: (_, __) => const SizedBox.shrink(),
         ),
       ],
     );

@@ -14,9 +14,9 @@ class TasksSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tasksAsync = ref.watch(todayTasksProvider);
-    final progress   = ref.watch(taskProgressProvider);
-    final done       = ref.watch(completedCountProvider);
-    final total      = ref.watch(totalCountProvider);
+    final progress = ref.watch(taskProgressProvider);
+    final done = ref.watch(completedCountProvider);
+    final total = ref.watch(totalCountProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,8 +34,7 @@ class TasksSection extends ConsumerWidget {
         tasksAsync.when(
           loading: () => const _SkeletonSlots(),
           error: (e, _) => Text('Error: $e',
-              style: AppTypography.bodySmall
-                  .copyWith(color: AppColors.error)),
+              style: AppTypography.bodySmall.copyWith(color: AppColors.error)),
           data: (tasks) => _TaskSlots(tasks: tasks),
         ),
       ],
@@ -53,14 +52,14 @@ class _ProgressBar extends StatelessWidget {
       return Container(
         height: 4,
         decoration: BoxDecoration(
-          color:        AppColors.border,
+          color: AppColors.border,
           borderRadius: BorderRadius.circular(2),
         ),
         child: Align(
           alignment: Alignment.centerLeft,
           child: AnimatedContainer(
             duration: AppConstants.animSlow,
-            curve:    Curves.easeOut,
+            curve: Curves.easeOut,
             width: constraints.maxWidth * progress,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -68,7 +67,7 @@ class _ProgressBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
               boxShadow: [
                 BoxShadow(
-                  color:      AppColors.primary.withOpacity(0.5),
+                  color: AppColors.primary.withOpacity(0.5),
                   blurRadius: 6,
                   spreadRadius: -1,
                 ),
@@ -89,7 +88,7 @@ class _TaskSlots extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(AppConstants.maxDailyTasks, (i) {
-        final pos  = i + 1;
+        final pos = i + 1;
         final task = tasks.firstWhereOrNull((t) => t.position == pos);
         if (task != null) return TaskTile(task: task);
         return _EmptySlot(position: pos);
@@ -100,7 +99,9 @@ class _TaskSlots extends StatelessWidget {
 
 extension _FirstWhereOrNull<T> on List<T> {
   T? firstWhereOrNull(bool Function(T) test) {
-    for (final e in this) { if (test(e)) return e; }
+    for (final e in this) {
+      if (test(e)) return e;
+    }
     return null;
   }
 }
@@ -114,7 +115,7 @@ class _EmptySlot extends StatelessWidget {
     return GestureDetector(
       onTap: () => showAddTaskSheet(context, position: position),
       child: Container(
-        margin:  const EdgeInsets.only(bottom: 8),
+        margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.border),
@@ -122,7 +123,8 @@ class _EmptySlot extends StatelessWidget {
         ),
         child: Row(children: [
           Container(
-            width: 26, height: 26,
+            width: 26,
+            height: 26,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: AppColors.border.withOpacity(0.6)),
@@ -130,8 +132,8 @@ class _EmptySlot extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           Text('Add priority $position',
-              style: AppTypography.body
-                  .copyWith(color: AppColors.textDisabled)),
+              style:
+                  AppTypography.body.copyWith(color: AppColors.textDisabled)),
           const Spacer(),
           Icon(Icons.add_rounded, color: AppColors.textDisabled, size: 18),
         ]),
@@ -145,14 +147,16 @@ class _SkeletonSlots extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: List.generate(3, (_) => Container(
-        height: 56,
-        margin: const EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          color:        AppColors.surfaceElevated,
-          borderRadius: BorderRadius.circular(AppConstants.radiusMD),
-        ),
-      )),
+      children: List.generate(
+          3,
+          (_) => Container(
+                height: 56,
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceElevated,
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+                ),
+              )),
     );
   }
 }

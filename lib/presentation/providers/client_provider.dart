@@ -24,23 +24,23 @@ class ClientNotifier extends StateNotifier<AsyncValue<List<Client>>> {
   }
 
   Future<void> add({
-    required String       name,
+    required String name,
     required ClientStatus status,
     required PaymentState paymentState,
-    List<String>          deliverables = const [],
-    String?               notes,
+    List<String> deliverables = const [],
+    String? notes,
   }) async {
     if (name.trim().isEmpty) return;
     try {
-      final now    = DateTime.now();
+      final now = DateTime.now();
       final client = Client(
-        name:         name.trim(),
-        status:       status,
+        name: name.trim(),
+        status: status,
         paymentState: paymentState,
         deliverables: deliverables,
-        notes:        notes?.trim().isEmpty == true ? null : notes?.trim(),
-        createdAt:    now,
-        updatedAt:    now,
+        notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
+        createdAt: now,
+        updatedAt: now,
       );
       final created = await _repo.insert(client);
       _prepend(created);
@@ -63,16 +63,14 @@ class ClientNotifier extends StateNotifier<AsyncValue<List<Client>>> {
     } catch (_) {}
   }
 
-  void _prepend(Client c) => state.whenData(
-      (list) => state = AsyncValue.data([c, ...list]));
+  void _prepend(Client c) =>
+      state.whenData((list) => state = AsyncValue.data([c, ...list]));
 
   void _replace(Client c) => state.whenData((list) =>
-      state = AsyncValue.data(
-          list.map((x) => x.id == c.id ? c : x).toList()));
+      state = AsyncValue.data(list.map((x) => x.id == c.id ? c : x).toList()));
 
   void _remove(Client c) => state.whenData((list) =>
-      state = AsyncValue.data(
-          list.where((x) => x.id != c.id).toList()));
+      state = AsyncValue.data(list.where((x) => x.id != c.id).toList()));
 }
 
 final clientsProvider =
@@ -83,10 +81,10 @@ final clientsProvider =
 final filteredClientsProvider = Provider<List<Client>>((ref) {
   final filter = ref.watch(clientStatusFilterProvider);
   return ref.watch(clientsProvider).whenOrNull(
-        data: (clients) => filter == null
-            ? clients
-            : clients.where((c) => c.status == filter).toList(),
-      ) ??
+            data: (clients) => filter == null
+                ? clients
+                : clients.where((c) => c.status == filter).toList(),
+          ) ??
       [];
 });
 
@@ -97,8 +95,8 @@ final clientSummaryProvider = FutureProvider<Map<String, int>>((ref) {
 
 final activeClientCountProvider = Provider<int>((ref) {
   return ref.watch(clientsProvider).whenOrNull(
-        data: (clients) =>
-            clients.where((c) => c.status == ClientStatus.active).length,
-      ) ??
+            data: (clients) =>
+                clients.where((c) => c.status == ClientStatus.active).length,
+          ) ??
       0;
 });

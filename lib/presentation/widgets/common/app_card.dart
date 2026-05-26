@@ -25,17 +25,17 @@ class AppCard extends StatelessWidget {
     final r = borderRadius ?? AppConstants.radiusLG;
     return Container(
       decoration: BoxDecoration(
-        color:        color ?? AppColors.surface,
+        color: color ?? AppColors.surface,
         borderRadius: BorderRadius.circular(r),
         border: Border.all(color: borderColor ?? AppColors.border),
       ),
       child: Material(
-        color:        Colors.transparent,
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(r),
         child: InkWell(
-          onTap:        onTap,
+          onTap: onTap,
           borderRadius: BorderRadius.circular(r),
-          splashColor:    AppColors.primary.withOpacity(0.07),
+          splashColor: AppColors.primary.withOpacity(0.07),
           highlightColor: AppColors.primary.withOpacity(0.04),
           child: Padding(
             padding: padding ?? const EdgeInsets.all(AppConstants.spaceMD),

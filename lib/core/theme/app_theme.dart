@@ -30,13 +30,13 @@ abstract final class AppTheme {
           statusBarIconBrightness: Brightness.light,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme:  CardThemeData(
         color: AppColors.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: AppColors.border),
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
@@ -62,10 +62,13 @@ abstract final class AppTheme {
           borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         hintStyle: const TextStyle(color: AppColors.textDisabled),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
       dividerTheme: const DividerThemeData(
-        color: AppColors.border, thickness: 1, space: 0,
+        color: AppColors.border,
+        thickness: 1,
+        space: 0,
       ),
     );
   }

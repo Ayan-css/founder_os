@@ -29,14 +29,13 @@ class CapturesNotifier extends StateNotifier<AsyncValue<List<Capture>>> {
     if (content.trim().isEmpty) return;
     try {
       final capture = Capture(
-        content:   content.trim(),
-        type:      type,
+        content: content.trim(),
+        type: type,
         createdAt: DateTime.now(),
       );
       final created = await _repo.insert(capture);
       if (_currentFilter == null || _currentFilter == type) {
-        state.whenData((list) =>
-            state = AsyncValue.data([created, ...list]));
+        state.whenData((list) => state = AsyncValue.data([created, ...list]));
       }
     } catch (_) {}
   }
@@ -45,8 +44,8 @@ class CapturesNotifier extends StateNotifier<AsyncValue<List<Capture>>> {
     if (capture.id == null) return;
     try {
       await _repo.delete(capture.id!);
-      state.whenData((list) => state = AsyncValue.data(
-          list.where((c) => c.id != capture.id).toList()));
+      state.whenData((list) => state =
+          AsyncValue.data(list.where((c) => c.id != capture.id).toList()));
     } catch (_) {}
   }
 }

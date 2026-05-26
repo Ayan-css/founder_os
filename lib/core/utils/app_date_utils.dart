@@ -1,18 +1,18 @@
 import 'package:intl/intl.dart';
 
 abstract final class AppDateUtils {
-  static final _dbFormat      = DateFormat('yyyy-MM-dd');
+  static final _dbFormat = DateFormat('yyyy-MM-dd');
   static final _displayFormat = DateFormat('EEEE, MMMM d');
 
-  static String toDbDate(DateTime date)   => _dbFormat.format(date);
+  static String toDbDate(DateTime date) => _dbFormat.format(date);
   static DateTime fromDbDate(String date) => _dbFormat.parse(date);
-  static String todayDbDate()             => toDbDate(DateTime.now());
+  static String todayDbDate() => toDbDate(DateTime.now());
 
   static String formatDisplayDate(DateTime date) => _displayFormat.format(date);
 
   static String getGreeting() {
     final h = DateTime.now().hour;
-    if (h < 5)  return 'Still up?';
+    if (h < 5) return 'Still up?';
     if (h < 12) return 'Good morning';
     if (h < 17) return 'Good afternoon';
     if (h < 21) return 'Good evening';

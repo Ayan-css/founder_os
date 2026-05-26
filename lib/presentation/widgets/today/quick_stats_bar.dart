@@ -13,34 +13,35 @@ class QuickStatsBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final done     = ref.watch(completedCountProvider);
+    final done = ref.watch(completedCountProvider);
     final sessions = ref.watch(focusTimerProvider).sessionsCompleted;
-    final streak   = ref.watch(streakProvider).valueOrNull ?? 0;
-    final quote    = _todayQuote();
+    final streak = ref.watch(streakProvider).valueOrNull ?? 0;
+    final quote = _todayQuote();
 
     return Column(
       children: [
         Row(children: [
-          _Stat(value: '$done',      label: 'completed'),
+          _Stat(value: '$done', label: 'completed'),
           _Divider(),
-          _Stat(value: '$sessions',  label: 'sessions'),
+          _Stat(value: '$sessions', label: 'sessions'),
           _Divider(),
           _Stat(value: '${streak}d', label: 'streak'),
         ]),
         const SizedBox(height: 20),
         Container(
-          width:   double.infinity,
+          width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color:        AppColors.surfaceElevated,
+            color: AppColors.surfaceElevated,
             borderRadius: BorderRadius.circular(AppConstants.radiusMD),
             border: Border.all(color: AppColors.borderSubtle),
           ),
           child: Row(children: [
             Container(
-              width: 3, height: 36,
+              width: 3,
+              height: 36,
               decoration: BoxDecoration(
-                color:        AppColors.primary,
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -53,8 +54,8 @@ class QuickStatsBar extends ConsumerWidget {
   }
 
   String _todayQuote() {
-    final idx = AppDateUtils.getDayOfYear() %
-        AppConstants.motivationalQuotes.length;
+    final idx =
+        AppDateUtils.getDayOfYear() % AppConstants.motivationalQuotes.length;
     return AppConstants.motivationalQuotes[idx];
   }
 }
@@ -69,7 +70,8 @@ class _Stat extends StatelessWidget {
       child: Column(children: [
         Text(value, style: AppTypography.statValue),
         const SizedBox(height: 2),
-        Text(label, style: AppTypography.statLabel, textAlign: TextAlign.center),
+        Text(label,
+            style: AppTypography.statLabel, textAlign: TextAlign.center),
       ]),
     );
   }

@@ -5,12 +5,12 @@ class TaskRepository {
   final _db = DatabaseHelper.instance;
 
   Future<List<Task>> getTasksForDate(String date) async {
-    final db   = await _db.database;
+    final db = await _db.database;
     final maps = await db.query(
       'tasks',
-      where:     'date = ?',
+      where: 'date = ?',
       whereArgs: [date],
-      orderBy:   'position ASC',
+      orderBy: 'position ASC',
     );
     return maps.map(Task.fromMap).toList();
   }
@@ -24,8 +24,8 @@ class TaskRepository {
   Future<void> updateTask(Task task) async {
     assert(task.id != null);
     final db = await _db.database;
-    await db.update('tasks', task.toMap(),
-        where: 'id = ?', whereArgs: [task.id]);
+    await db
+        .update('tasks', task.toMap(), where: 'id = ?', whereArgs: [task.id]);
   }
 
   Future<void> deleteTask(int id) async {
@@ -35,8 +35,8 @@ class TaskRepository {
 
   Future<Task> toggleCompletion(Task task) async {
     final updated = task.copyWith(
-      isCompleted:      !task.isCompleted,
-      completedAt:      !task.isCompleted ? DateTime.now() : null,
+      isCompleted: !task.isCompleted,
+      completedAt: !task.isCompleted ? DateTime.now() : null,
       clearCompletedAt: task.isCompleted,
     );
     await updateTask(updated);
@@ -44,7 +44,7 @@ class TaskRepository {
   }
 
   Future<List<String>> getDatesWithCompletedTasks() async {
-    final db     = await _db.database;
+    final db = await _db.database;
     final result = await db.rawQuery('''
       SELECT DISTINCT date FROM tasks
       WHERE is_completed = 1

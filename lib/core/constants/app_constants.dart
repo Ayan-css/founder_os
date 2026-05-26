@@ -1,18 +1,18 @@
 abstract final class AppConstants {
   static const int focusDurationMinutes = 25;
-  static const int shortBreakMinutes    = 5;
-  static const int maxDailyTasks        = 3;
-  static const int maxTaskTitleLength   = 120;
+  static const int shortBreakMinutes = 5;
+  static const int maxDailyTasks = 3;
+  static const int maxTaskTitleLength = 120;
 
   static const Duration animSnappy = Duration(milliseconds: 120);
   static const Duration animNormal = Duration(milliseconds: 280);
-  static const Duration animSlow   = Duration(milliseconds: 500);
+  static const Duration animSlow = Duration(milliseconds: 500);
 
-  static const double spaceXS  = 4;
-  static const double spaceSM  = 8;
-  static const double spaceMD  = 16;
-  static const double spaceLG  = 24;
-  static const double spaceXL  = 32;
+  static const double spaceXS = 4;
+  static const double spaceSM = 8;
+  static const double spaceMD = 16;
+  static const double spaceLG = 24;
+  static const double spaceXL = 32;
   static const double spaceXXL = 48;
 
   static const double radiusSM = 8;

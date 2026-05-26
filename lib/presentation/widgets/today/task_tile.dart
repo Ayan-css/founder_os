@@ -19,18 +19,17 @@ class TaskTile extends ConsumerStatefulWidget {
 class _TaskTileState extends ConsumerState<TaskTile>
     with SingleTickerProviderStateMixin {
   late AnimationController _bounceCtrl;
-  late Animation<double>   _bounceAnim;
+  late Animation<double> _bounceAnim;
 
   @override
   void initState() {
     super.initState();
-    _bounceCtrl = AnimationController(
-        vsync: this, duration: AppConstants.animNormal);
+    _bounceCtrl =
+        AnimationController(vsync: this, duration: AppConstants.animNormal);
     _bounceAnim = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.25), weight: 40),
       TweenSequenceItem(tween: Tween(begin: 1.25, end: 1.0), weight: 60),
-    ]).animate(
-        CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut));
+    ]).animate(CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -47,11 +46,11 @@ class _TaskTileState extends ConsumerState<TaskTile>
 
   @override
   Widget build(BuildContext context) {
-    final task      = widget.task;
+    final task = widget.task;
     final completed = task.isCompleted;
 
     return Dismissible(
-      key:       Key('task_${task.id}'),
+      key: Key('task_${task.id}'),
       direction: DismissDirection.endToStart,
       background: _DeleteBackground(),
       onDismissed: (_) {
@@ -60,7 +59,7 @@ class _TaskTileState extends ConsumerState<TaskTile>
       },
       child: AnimatedContainer(
         duration: AppConstants.animNormal,
-        curve:    Curves.easeOut,
+        curve: Curves.easeOut,
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: completed
@@ -83,18 +82,21 @@ class _TaskTileState extends ConsumerState<TaskTile>
             child: Row(
               children: [
                 GestureDetector(
-                  onTap:     _toggle,
-                  behavior:  HitTestBehavior.opaque,
+                  onTap: _toggle,
+                  behavior: HitTestBehavior.opaque,
                   child: ScaleTransition(
                     scale: _bounceAnim,
                     child: AnimatedContainer(
                       duration: AppConstants.animNormal,
-                      width: 26, height: 26,
+                      width: 26,
+                      height: 26,
                       decoration: BoxDecoration(
-                        color: completed ? AppColors.success : Colors.transparent,
+                        color:
+                            completed ? AppColors.success : Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: completed ? AppColors.success : AppColors.border,
+                          color:
+                              completed ? AppColors.success : AppColors.border,
                           width: completed ? 0 : 1.5,
                         ),
                       ),
@@ -111,8 +113,8 @@ class _TaskTileState extends ConsumerState<TaskTile>
                     duration: AppConstants.animNormal,
                     style: completed
                         ? AppTypography.bodyLarge.copyWith(
-                            color:           AppColors.textMuted,
-                            decoration:      TextDecoration.lineThrough,
+                            color: AppColors.textMuted,
+                            decoration: TextDecoration.lineThrough,
                             decorationColor: AppColors.textMuted,
                           )
                         : AppTypography.bodyLarge,
@@ -121,9 +123,10 @@ class _TaskTileState extends ConsumerState<TaskTile>
                   ),
                 ),
                 Container(
-                  width: 22, height: 22,
+                  width: 22,
+                  height: 22,
                   decoration: BoxDecoration(
-                    color:        AppColors.primaryDim,
+                    color: AppColors.primaryDim,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Center(
@@ -147,12 +150,12 @@ class _DeleteBackground extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color:        AppColors.error.withOpacity(0.15),
+        color: AppColors.error.withOpacity(0.15),
         borderRadius: BorderRadius.circular(AppConstants.radiusMD),
         border: Border.all(color: AppColors.error.withOpacity(0.3)),
       ),
       alignment: Alignment.centerRight,
-      padding:   const EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.only(right: 20),
       child: const Icon(Icons.delete_outline_rounded,
           color: AppColors.error, size: 22),
     );

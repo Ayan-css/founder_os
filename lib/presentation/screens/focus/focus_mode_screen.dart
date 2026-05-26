@@ -17,7 +17,8 @@ class FocusModeScreen extends ConsumerStatefulWidget {
   ConsumerState<FocusModeScreen> createState() => _FocusModeScreenState();
 }
 
-class _FocusModeScreenState extends ConsumerState<FocusModeScreen> with SingleTickerProviderStateMixin {
+class _FocusModeScreenState extends ConsumerState<FocusModeScreen>
+    with SingleTickerProviderStateMixin {
   bool _showCompletion = false;
   late AnimationController _entranceCtrl;
   late Animation<double> _entranceFade;
@@ -27,22 +28,28 @@ class _FocusModeScreenState extends ConsumerState<FocusModeScreen> with SingleTi
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    _entranceCtrl = AnimationController(vsync: this, duration: AppConstants.animSlow);
-    _entranceFade = CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut);
-    _entranceSlide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+    _entranceCtrl =
+        AnimationController(vsync: this, duration: AppConstants.animSlow);
+    _entranceFade =
+        CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut);
+    _entranceSlide = Tween<Offset>(
+            begin: const Offset(0, 0.06), end: Offset.zero)
         .animate(CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut));
     _entranceCtrl.forward();
   }
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     _entranceCtrl.dispose();
     super.dispose();
   }
 
   Task? _firstIncompleteTask(List<Task> tasks) {
-    for (final t in tasks) { if (!t.isCompleted) return t; }
+    for (final t in tasks) {
+      if (!t.isCompleted) return t;
+    }
     return null;
   }
 
@@ -57,32 +64,42 @@ class _FocusModeScreenState extends ConsumerState<FocusModeScreen> with SingleTi
     final timer = ref.watch(focusTimerProvider);
     final notifier = ref.read(focusTimerProvider.notifier);
     final tasksSnap = ref.watch(todayTasksProvider);
-    final focusTask = tasksSnap.whenOrNull(data: (tasks) => _firstIncompleteTask(tasks));
+    final focusTask =
+        tasksSnap.whenOrNull(data: (tasks) => _firstIncompleteTask(tasks));
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(fit: StackFit.expand, children: [
         BreathingBackground(
           isActive: timer.isRunning,
-          child: SafeArea(child: FadeTransition(opacity: _entranceFade, child: SlideTransition(position: _entranceSlide,
-            child: _FocusLayout(timer: timer, notifier: notifier, focusTask: focusTask)))),
+          child: SafeArea(
+              child: FadeTransition(
+                  opacity: _entranceFade,
+                  child: SlideTransition(
+                      position: _entranceSlide,
+                      child: _FocusLayout(
+                          timer: timer,
+                          notifier: notifier,
+                          focusTask: focusTask)))),
         ),
-        if (_showCompletion) CompletionOverlay(
-          sessionsCompleted: timer.sessionsCompleted,
-          onNewSession: () {
-            setState(() => _showCompletion = false);
-            notifier.reset();
-            Future.microtask(notifier.start);
-          },
-          onReturn: () => Navigator.pop(context),
-        ),
+        if (_showCompletion)
+          CompletionOverlay(
+            sessionsCompleted: timer.sessionsCompleted,
+            onNewSession: () {
+              setState(() => _showCompletion = false);
+              notifier.reset();
+              Future.microtask(notifier.start);
+            },
+            onReturn: () => Navigator.pop(context),
+          ),
       ]),
     );
   }
 }
 
 class _FocusLayout extends StatelessWidget {
-  const _FocusLayout({required this.timer, required this.notifier, required this.focusTask});
+  const _FocusLayout(
+      {required this.timer, required this.notifier, required this.focusTask});
   final FocusTimerState timer;
   final FocusTimerNotifier notifier;
   final Task? focusTask;
@@ -95,7 +112,8 @@ class _FocusLayout extends StatelessWidget {
         child: Row(children: [
           _ExitButton(onTap: () => Navigator.pop(context)),
           const Spacer(),
-          if (timer.sessionsCompleted > 0) _SessionBadge(count: timer.sessionsCompleted),
+          if (timer.sessionsCompleted > 0)
+            _SessionBadge(count: timer.sessionsCompleted),
         ]),
       ),
       const Spacer(flex: 2),
@@ -107,14 +125,18 @@ class _FocusLayout extends StatelessWidget {
       ),
       const SizedBox(height: 28),
       FocusRing(
-        progress: timer.progress, isCompleted: timer.isCompleted,
-        isPaused: timer.isPaused, size: 272,
+        progress: timer.progress,
+        isCompleted: timer.isCompleted,
+        isPaused: timer.isPaused,
+        size: 272,
         child: _TimerDisplay(timer: timer),
       ),
       const Spacer(flex: 2),
       AnimatedSwitcher(
         duration: AppConstants.animNormal,
-        child: timer.isCompleted ? const SizedBox.shrink() : _Controls(timer: timer, notifier: notifier),
+        child: timer.isCompleted
+            ? const SizedBox.shrink()
+            : _Controls(timer: timer, notifier: notifier),
       ),
       const SizedBox(height: 48),
     ]);
@@ -135,16 +157,25 @@ class _TimerDisplay extends StatelessWidget {
     };
     return Column(mainAxisSize: MainAxisSize.min, children: [
       AnimatedDefaultTextStyle(
-        duration: AppConstants.animNormal,
-        style: AppTypography.timerDisplay.copyWith(fontSize: 54,
-          color: timer.isCompleted ? AppColors.success : timer.isPaused ? AppColors.textMuted : AppColors.textPrimary),
-        child: Text(timer.formattedTime)),
+          duration: AppConstants.animNormal,
+          style: AppTypography.timerDisplay.copyWith(
+              fontSize: 54,
+              color: timer.isCompleted
+                  ? AppColors.success
+                  : timer.isPaused
+                      ? AppColors.textMuted
+                      : AppColors.textPrimary),
+          child: Text(timer.formattedTime)),
       const SizedBox(height: 5),
       AnimatedSwitcher(
         duration: AppConstants.animNormal,
-        child: Text(statusText, key: ValueKey(timer.status),
-          style: AppTypography.caption.copyWith(letterSpacing: 1.6,
-            color: timer.isCompleted ? AppColors.success : AppColors.textMuted)),
+        child: Text(statusText,
+            key: ValueKey(timer.status),
+            style: AppTypography.caption.copyWith(
+                letterSpacing: 1.6,
+                color: timer.isCompleted
+                    ? AppColors.success
+                    : AppColors.textMuted)),
       ),
     ]);
   }
@@ -155,13 +186,19 @@ class _TaskHint extends StatelessWidget {
   final String title;
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.symmetric(horizontal: 48),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text('FOCUSING ON', style: AppTypography.label),
-        const SizedBox(height: 8),
-        Text(title, style: AppTypography.body.copyWith(fontStyle: FontStyle.italic, color: AppColors.textSecondary.withOpacity(0.85)),
-          textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
-      ]));
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text('FOCUSING ON', style: AppTypography.label),
+          const SizedBox(height: 8),
+          Text(title,
+              style: AppTypography.body.copyWith(
+                  fontStyle: FontStyle.italic,
+                  color: AppColors.textSecondary.withOpacity(0.85)),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis),
+        ]));
   }
 }
 
@@ -174,8 +211,12 @@ class _Controls extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       AnimatedOpacity(
-        duration: AppConstants.animNormal, opacity: timer.isIdle ? 0.0 : 1.0,
-        child: _SmallControl(icon: Icons.refresh_rounded, onTap: timer.isIdle ? null : notifier.reset, tooltip: 'Reset')),
+          duration: AppConstants.animNormal,
+          opacity: timer.isIdle ? 0.0 : 1.0,
+          child: _SmallControl(
+              icon: Icons.refresh_rounded,
+              onTap: timer.isIdle ? null : notifier.reset,
+              tooltip: 'Reset')),
       const SizedBox(width: 22),
       _PrimaryButton(timer: timer, notifier: notifier),
       const SizedBox(width: 22),
@@ -198,15 +239,37 @@ class _PrimaryButton extends StatelessWidget {
       TimerStatus.completed => (Icons.refresh_rounded, notifier.reset),
     };
     return GestureDetector(
-      onTap: () { HapticFeedback.lightImpact(); fn(); },
+      onTap: () {
+        HapticFeedback.lightImpact();
+        fn();
+      },
       child: AnimatedContainer(
         duration: AppConstants.animNormal,
-        width: 76, height: 76,
-        decoration: BoxDecoration(shape: BoxShape.circle,
-          color: timer.isPaused || timer.isIdle ? AppColors.surfaceElevated : AppColors.primary,
-          border: Border.all(color: timer.isPaused || timer.isIdle ? AppColors.border : AppColors.primaryLight.withOpacity(0.35), width: 1.5),
-          boxShadow: timer.isRunning ? [BoxShadow(color: AppColors.primary.withOpacity(0.38), blurRadius: 28, spreadRadius: -4)] : []),
-        child: Icon(icon, size: 32, color: timer.isPaused || timer.isIdle ? AppColors.textSecondary : Colors.white),
+        width: 76,
+        height: 76,
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: timer.isPaused || timer.isIdle
+                ? AppColors.surfaceElevated
+                : AppColors.primary,
+            border: Border.all(
+                color: timer.isPaused || timer.isIdle
+                    ? AppColors.border
+                    : AppColors.primaryLight.withOpacity(0.35),
+                width: 1.5),
+            boxShadow: timer.isRunning
+                ? [
+                    BoxShadow(
+                        color: AppColors.primary.withOpacity(0.38),
+                        blurRadius: 28,
+                        spreadRadius: -4)
+                  ]
+                : []),
+        child: Icon(icon,
+            size: 32,
+            color: timer.isPaused || timer.isIdle
+                ? AppColors.textSecondary
+                : Colors.white),
       ),
     );
   }
@@ -220,11 +283,18 @@ class _SmallControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(message: tooltip,
-      child: GestureDetector(onTap: onTap,
-        child: Container(width: 48, height: 48,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.surfaceElevated, border: Border.all(color: AppColors.border)),
-          child: Icon(icon, size: 20, color: AppColors.textMuted))));
+    return Tooltip(
+        message: tooltip,
+        child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.surfaceElevated,
+                    border: Border.all(color: AppColors.border)),
+                child: Icon(icon, size: 20, color: AppColors.textMuted))));
   }
 }
 
@@ -233,16 +303,22 @@ class _ExitButton extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(color: AppColors.surfaceElevated.withOpacity(0.75), borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.border.withOpacity(0.45))),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.arrow_back_ios_new_rounded, size: 13, color: AppColors.textMuted),
-          const SizedBox(width: 6),
-          Text('Exit', style: AppTypography.caption.copyWith(color: AppColors.textMuted, letterSpacing: 0.4)),
-        ])));
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+                color: AppColors.surfaceElevated.withOpacity(0.75),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.border.withOpacity(0.45))),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              const Icon(Icons.arrow_back_ios_new_rounded,
+                  size: 13, color: AppColors.textMuted),
+              const SizedBox(width: 6),
+              Text('Exit',
+                  style: AppTypography.caption.copyWith(
+                      color: AppColors.textMuted, letterSpacing: 0.4)),
+            ])));
   }
 }
 
@@ -252,12 +328,17 @@ class _SessionBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(color: AppColors.primaryDim, borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.primary.withOpacity(0.3))),
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        const Text('🔥', style: TextStyle(fontSize: 12)),
-        const SizedBox(width: 5),
-        Text('$count session${count == 1 ? '' : 's'}', style: AppTypography.caption.copyWith(color: AppColors.primaryLight)),
-      ]));
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+            color: AppColors.primaryDim,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.primary.withOpacity(0.3))),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          const Text('🔥', style: TextStyle(fontSize: 12)),
+          const SizedBox(width: 5),
+          Text('$count session${count == 1 ? '' : 's'}',
+              style: AppTypography.caption
+                  .copyWith(color: AppColors.primaryLight)),
+        ]));
   }
 }

@@ -12,7 +12,7 @@ Future<void> showAddTaskSheet(
   Task? existingTask,
 }) {
   return showModalBottomSheet(
-    context:            context,
+    context: context,
     isScrollControlled: true,
     builder: (_) =>
         _AddTaskSheet(position: position, existingTask: existingTask),
@@ -21,7 +21,7 @@ Future<void> showAddTaskSheet(
 
 class _AddTaskSheet extends ConsumerStatefulWidget {
   const _AddTaskSheet({required this.position, this.existingTask});
-  final int  position;
+  final int position;
   final Task? existingTask;
 
   @override
@@ -45,8 +45,11 @@ class _AddTaskSheetState extends ConsumerState<_AddTaskSheet> {
 
   void _save() {
     final notifier = ref.read(todayTasksProvider.notifier);
-    final text     = _ctrl.text.trim();
-    if (text.isEmpty) { Navigator.pop(context); return; }
+    final text = _ctrl.text.trim();
+    if (text.isEmpty) {
+      Navigator.pop(context);
+      return;
+    }
 
     if (widget.existingTask != null) {
       notifier.updateTitle(widget.existingTask!, text);
@@ -62,7 +65,9 @@ class _AddTaskSheetState extends ConsumerState<_AddTaskSheet> {
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.viewInsetsOf(context).bottom,
-        left: 24, right: 24, top: 24,
+        left: 24,
+        right: 24,
+        top: 24,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -70,7 +75,8 @@ class _AddTaskSheetState extends ConsumerState<_AddTaskSheet> {
         children: [
           Center(
             child: Container(
-              width: 40, height: 4,
+              width: 40,
+              height: 4,
               decoration: BoxDecoration(
                 color: AppColors.border,
                 borderRadius: BorderRadius.circular(2),
@@ -80,9 +86,10 @@ class _AddTaskSheetState extends ConsumerState<_AddTaskSheet> {
           const SizedBox(height: 20),
           Row(children: [
             Container(
-              width: 28, height: 28,
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color:        AppColors.primaryDim,
+                color: AppColors.primaryDim,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
@@ -99,15 +106,15 @@ class _AddTaskSheetState extends ConsumerState<_AddTaskSheet> {
           ]),
           const SizedBox(height: 20),
           TextField(
-            controller:   _ctrl,
-            autofocus:    true,
-            maxLines:     3,
-            minLines:     1,
-            maxLength:    AppConstants.maxTaskTitleLength,
-            style:        AppTypography.bodyLarge,
+            controller: _ctrl,
+            autofocus: true,
+            maxLines: 3,
+            minLines: 1,
+            maxLength: AppConstants.maxTaskTitleLength,
+            style: AppTypography.bodyLarge,
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
-              hintText:    'What must get done?',
+              hintText: 'What must get done?',
               counterStyle: TextStyle(color: AppColors.textDisabled),
             ),
             onSubmitted: (_) => _save(),
@@ -118,7 +125,8 @@ class _AddTaskSheetState extends ConsumerState<_AddTaskSheet> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                    ref.read(todayTasksProvider.notifier)
+                    ref
+                        .read(todayTasksProvider.notifier)
                         .deleteTask(widget.existingTask!);
                     Navigator.pop(context);
                   },

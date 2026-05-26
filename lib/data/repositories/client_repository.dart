@@ -5,7 +5,7 @@ class ClientRepository {
   final _db = DatabaseHelper.instance;
 
   Future<List<Client>> getAll() async {
-    final db   = await _db.database;
+    final db = await _db.database;
     final maps = await db.query(
       'clients',
       orderBy: '''
@@ -30,9 +30,9 @@ class ClientRepository {
   }
 
   Future<Client?> getById(int id) async {
-    final db   = await _db.database;
-    final maps = await db.query('clients',
-        where: 'id = ?', whereArgs: [id], limit: 1);
+    final db = await _db.database;
+    final maps =
+        await db.query('clients', where: 'id = ?', whereArgs: [id], limit: 1);
     return maps.isEmpty ? null : Client.fromMap(maps.first);
   }
 
@@ -55,7 +55,7 @@ class ClientRepository {
   }
 
   Future<Map<String, int>> getSummaryCounts() async {
-    final db     = await _db.database;
+    final db = await _db.database;
     final result = await db.rawQuery('''
       SELECT
         COUNT(*)                                                         AS total,
@@ -68,9 +68,9 @@ class ClientRepository {
     ''');
     final row = result.first;
     return {
-      'total':    (row['total']    as int?) ?? 0,
-      'active':   (row['active']   as int?) ?? 0,
-      'overdue':  (row['overdue']  as int?) ?? 0,
+      'total': (row['total'] as int?) ?? 0,
+      'active': (row['active'] as int?) ?? 0,
+      'overdue': (row['overdue'] as int?) ?? 0,
       'awaiting': (row['awaiting'] as int?) ?? 0,
     };
   }

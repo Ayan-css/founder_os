@@ -13,15 +13,15 @@ class FocusTimerState {
   final int sessionsCompleted;
 
   const FocusTimerState({
-    this.status            = TimerStatus.idle,
-    this.remainingSeconds  = _total,
-    this.totalSeconds      = _total,
+    this.status = TimerStatus.idle,
+    this.remainingSeconds = _total,
+    this.totalSeconds = _total,
     this.sessionsCompleted = 0,
   });
 
-  bool get isIdle      => status == TimerStatus.idle;
-  bool get isRunning   => status == TimerStatus.running;
-  bool get isPaused    => status == TimerStatus.paused;
+  bool get isIdle => status == TimerStatus.idle;
+  bool get isRunning => status == TimerStatus.running;
+  bool get isPaused => status == TimerStatus.paused;
   bool get isCompleted => status == TimerStatus.completed;
 
   double get progress =>
@@ -39,9 +39,9 @@ class FocusTimerState {
     int? sessionsCompleted,
   }) =>
       FocusTimerState(
-        status:            status            ?? this.status,
-        remainingSeconds:  remainingSeconds  ?? this.remainingSeconds,
-        totalSeconds:      totalSeconds,
+        status: status ?? this.status,
+        remainingSeconds: remainingSeconds ?? this.remainingSeconds,
+        totalSeconds: totalSeconds,
         sessionsCompleted: sessionsCompleted ?? this.sessionsCompleted,
       );
 }
@@ -53,7 +53,7 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
 
   void start() {
     if (state.isRunning) return;
-    state   = state.copyWith(status: TimerStatus.running);
+    state = state.copyWith(status: TimerStatus.running);
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
   }
 
@@ -75,8 +75,8 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
     if (state.remainingSeconds <= 1) {
       _ticker?.cancel();
       state = state.copyWith(
-        status:            TimerStatus.completed,
-        remainingSeconds:  0,
+        status: TimerStatus.completed,
+        remainingSeconds: 0,
         sessionsCompleted: state.sessionsCompleted + 1,
       );
     } else {

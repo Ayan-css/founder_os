@@ -3,7 +3,8 @@ import '../../core/utils/app_date_utils.dart';
 import '../../data/repositories/task_repository.dart';
 import '../../domain/models/task.dart';
 
-final taskRepositoryProvider = Provider<TaskRepository>((_) => TaskRepository());
+final taskRepositoryProvider =
+    Provider<TaskRepository>((_) => TaskRepository());
 
 class TodayTasksNotifier extends StateNotifier<AsyncValue<List<Task>>> {
   final TaskRepository _repo;
@@ -25,9 +26,9 @@ class TodayTasksNotifier extends StateNotifier<AsyncValue<List<Task>>> {
     if (title.trim().isEmpty) return;
     try {
       final task = Task(
-        title:     title.trim(),
-        date:      AppDateUtils.todayDbDate(),
-        position:  position,
+        title: title.trim(),
+        date: AppDateUtils.todayDbDate(),
+        position: position,
         createdAt: DateTime.now(),
       );
       final created = await _repo.insertTask(task);
@@ -42,8 +43,8 @@ class TodayTasksNotifier extends StateNotifier<AsyncValue<List<Task>>> {
   Future<void> toggleTask(Task task) async {
     try {
       final updated = await _repo.toggleCompletion(task);
-      _mutate((tasks) =>
-          tasks.map((t) => t.id == task.id ? updated : t).toList());
+      _mutate(
+          (tasks) => tasks.map((t) => t.id == task.id ? updated : t).toList());
     } catch (_) {}
   }
 
@@ -52,8 +53,8 @@ class TodayTasksNotifier extends StateNotifier<AsyncValue<List<Task>>> {
     try {
       final updated = task.copyWith(title: newTitle.trim());
       await _repo.updateTask(updated);
-      _mutate((tasks) =>
-          tasks.map((t) => t.id == task.id ? updated : t).toList());
+      _mutate(
+          (tasks) => tasks.map((t) => t.id == task.id ? updated : t).toList());
     } catch (_) {}
   }
 
@@ -77,20 +78,21 @@ final todayTasksProvider =
 
 final completedCountProvider = Provider<int>((ref) =>
     ref.watch(todayTasksProvider).whenOrNull(
-      data: (t) => t.where((x) => x.isCompleted).length,
-    ) ?? 0);
+          data: (t) => t.where((x) => x.isCompleted).length,
+        ) ??
+    0);
 
 final totalCountProvider = Provider<int>((ref) =>
     ref.watch(todayTasksProvider).whenOrNull(data: (t) => t.length) ?? 0);
 
 final taskProgressProvider = Provider<double>((ref) {
-  final done  = ref.watch(completedCountProvider);
+  final done = ref.watch(completedCountProvider);
   final total = ref.watch(totalCountProvider);
   return total == 0 ? 0.0 : done / total;
 });
 
 final allTasksDoneProvider = Provider<bool>((ref) {
-  final done  = ref.watch(completedCountProvider);
+  final done = ref.watch(completedCountProvider);
   final total = ref.watch(totalCountProvider);
   return total > 0 && done == total;
 });

@@ -5,7 +5,7 @@ class ContentRepository {
   final _db = DatabaseHelper.instance;
 
   Future<List<ContentItem>> getAll() async {
-    final db   = await _db.database;
+    final db = await _db.database;
     final maps = await db.query('content_items', orderBy: 'updated_at DESC');
     return maps.map(ContentItem.fromMap).toList();
   }
